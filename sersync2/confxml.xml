@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<head version="2.5">
+    <host hostip="localhost" port="8008"></host> "本地主机地址"
+    <debug start="true"/> "是否开启debug模式"
+    <fileSystem xfs="false"/> "是否支持xfs文件系统"
+    <filter start="true"> "过滤,是否排除名称中含有指定字符串的文件的同步"
+    <exclude expression="(.*)\.svn*"></exclude>
+    </filter>
+    <inotify> "本段即是对内核inotify事件的过滤,哪些事件要触发,哪些不要触发"
+    <delete start="true"/>
+    <createFolder start="true"/>
+    <createFile start="false"/>
+    <closeWrite start="true"/>
+    <moveFrom start="true"/>
+    <moveTo start="true"/>
+    <attrib start="false"/>
+    <modify start="false"/>
+    </inotify>
+
+    <sersync>
+    <localpath watch="/storage/www"> "本地需要监控的目录 对应slave配置文件里的目录"
+        <remote ip="192.168.10.6" name="www"/>
+        <!--remote ip="" name="www"/ --> "支持多个目的端"
+    </localpath>
+    <rsync> "sersync调用rsync时的参数配置端"
+        <commonParams params="-artuz"/>
+        <auth start="false" users="root" passwordfile="/etc/rsync.pas"/>
+        <userDefinedPort start="false" port="874"/><!-- port=874 -->
+        <timeout start="false" time="100"/><!-- timeout=100 -->
+        <ssh start="false"/>
+    </rsync>
+    "指定如果同步失败 记录日志到哪个文件 以便在60分钟后尝试重传"
+    <failLog path="/usr/local/sersync/log/rsync_fail_log.sh" timeToExecute="60"/><!--default every 60mins execute once-->
+    <crontab start="true" schedule="600"><!--600mins--> "指定多长间隔执行一次完整同步"
+        <crontabfilter start="true"> "过滤"
+        <exclude expression="(.*)\.svn*"></exclude>
+        </crontabfilter>
+    </crontab>
+    <plugin start="false" name="command"/>
+    </sersync>
+
+    <plugin name="command"> "扩展插件功能的配置举例"
+    <param prefix="/bin/sh" suffix="" ignoreError="true"/>    <!--prefix /opt/tongbu/mmm.sh suffix-->
+    <filter start="false">
+        <include expression="(.*)\.php"/>
+        <include expression="(.*)\.sh"/>
+    </filter>
+    </plugin>
+
+    <plugin name="socket">
+    <localpath watch="/opt/tongbu">
+        <deshost ip="192.168.138.20" port="8009"/>
+    </localpath>
+    </plugin>
+    <plugin name="refreshCDN">
+    <localpath watch="/data0/htdocs/cms.xoyo.com/site/">
+        <cdninfo domainname="ccms.chinacache.com" port="80" username="xxxx" passwd="xxxx"/>
+        <sendurl base="http://pic.xoyo.com/cms"/>
+        <regexurl regex="false" match="cms.xoyo.com/site([/a-zA-Z0-9]*).xoyo.com/images"/>
+    </localpath>
+    </plugin>
+</head>

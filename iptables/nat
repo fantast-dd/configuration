@@ -1,0 +1,15 @@
+# 反向代理
+*nat
+:PREROUTING ACCEPT [0:0]
+:POSTROUTING ACCEPT [0:0]
+:OUTPUT ACCEPT [0:0]
+#-A PREROUTING -p udp --dport 8088 -j LOG --log-level notice --log-prefix "IN PACKETS: "
+-A PREROUTING -p udp -d 172.19.222.16/32 --dport 8088 -j DNAT --to-destination 192.168.9.185:8088
+-A PREROUTING -p udp -d 172.19.222.16/32 --dport 8288 -j DNAT --to-destination 192.168.9.185:8288
+-A PREROUTING -p tcp -d 172.19.222.16/32 --dport 8088 -j DNAT --to-destination 192.168.9.185:8088
+-A PREROUTING -p tcp -d 172.19.222.16/32 --dport 8288 -j DNAT --to-destination 192.168.9.185:8288
+-A PREROUTING -p tcp -d 172.19.222.16/32 --dport 80 -j DNAT --to-destination 192.168.9.165:80
+#-A POSTROUTING -p udp --dport 8088 -j LOG --log-level notice --log-prefix "OUT PACKETS: "
+-A POSTROUTING -d 192.168.9.165 -j MASQUERADE
+-A POSTROUTING -d 192.168.9.185 -j MASQUERADE
+COMMIT
