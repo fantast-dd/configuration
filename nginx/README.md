@@ -1,17 +1,20 @@
 ## nginx做http反向代理,web server,rtmp server
 
 ### 安装
-	useradd -M -s /sbin/nologin www
-	# proxy，webserver
-   	./configure --user=www --group=www --prefix=/storage/server/nginx-1.8.0 --with-http_stub_status_module
-   	# rtmp server
+   	./configure --prefix=/usr/local/nginx \
+   	--user=www \
+   	--group=www \
+   	--with-http_ssl_module \ 
+   	--with-http_stub_status_module
+   	make && make install
 
 ### Roles
 
-| Modules	 	      		 	             | proxy | web server | rtmp server |
-| ------------------------------------------ | ----- | ---------- | ----------- |
+| Modules	 	      		 	            | proxy | web server |
+| -------------------------------------| ----- | ---------- |
 | [Core functionality](#functionality)	   	 | yes   | yes        |
 | [ngx_http_core_module](#http_core)    	 | yes   | yes        |
+| [ngx_http_ssl_module](#http_ssl)    	 | yes   | yes        |
 | [ngx_http_headers_module](#http_headers) 	 | yes   | yes        |
 | [ngx_http_rewrite_module](#http_rewrite) 	 | yes   | yes        |
 | [ngx_http_proxy_module](#http_proxy)		 | yes   | no         |
@@ -110,6 +113,32 @@
 
 - root
 >为请求设置根目录
+
+- - - - - -
+
+#### http_ssl
+#####The ngx_http_ssl_module module provides the necessary support for HTTPS.This module is not built by default, it should be enabled with the --with-http_ssl_module configuration parameter.This module requires the OpenSSL library.
+
+- ssl_certificate
+>证书文件
+
+- ssl_certificate_key
+>私钥文件
+
+- ssl_session_cache
+>设置session缓存的类型和大小
+
+- ssl_session_timeout
+>设置session的过期时间
+
+- ssl_protocols
+>指定SSL协议
+
+- ssl_ciphers
+>指定ciphers
+
+- ssl_prefer_server_ciphers
+>指定在使用SSLv3和TLS协议的时候，服务器端ciphers优先级大于客户端ciphers
 
 - - - - - -
 
