@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <zabbix_export>
     <version>3.2</version>
-    <date>2017-01-09T15:22:12Z</date>
+    <date>2017-02-14T06:50:03Z</date>
     <groups>
         <group>
             <name>Templates</name>
@@ -461,6 +461,24 @@
             <screens/>
         </template>
     </templates>
+    <triggers>
+        <trigger>
+            <expression>{Template TCP Status:tcp.status[TIME-WAIT].last(0)}&gt;10000</expression>
+            <recovery_mode>0</recovery_mode>
+            <recovery_expression/>
+            <name>too many TIME-WAIT</name>
+            <correlation_mode>0</correlation_mode>
+            <correlation_tag/>
+            <url/>
+            <status>0</status>
+            <priority>2</priority>
+            <description/>
+            <type>0</type>
+            <manual_close>0</manual_close>
+            <dependencies/>
+            <tags/>
+        </trigger>
+    </triggers>
     <graphs>
         <graph>
             <name>TCP Status</name>
